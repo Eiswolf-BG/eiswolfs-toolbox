@@ -1,0 +1,23 @@
+# Eigene Partitionstabelle fuer Eiswolfs Toolbox: EIN einziges, grosses
+# App-Image statt des ESP32-Standard-Doppel-OTA-Schemas - ENDGUELTIGE
+# Entscheidung (Alex' Auftrag, 06.10., nach Rueckbau und erneuter
+# Bestaetigung): Toolbox bekommt KEINE Umschaltfunktion zu Flightradar
+# auf demselben Geraet (diese Idee ist verworfen, siehe CLAUDE.md
+# "Partitionsschema"), nutzt nie OTA-Updates (immer USB-Flash, spaeter
+# per eigenem Webflasher) und verwendet ausschliesslich die SD-Karte
+# fuer gespeicherte Daten (kein internes SPIFFS/LittleFS). Betrifft NUR
+# dieses Projekt - Flightradar bleibt unangetastet bei seinem eigenen
+# Doppel-OTA-Schema (eigenes Repo, eigene platformio.ini).
+#
+# "factory" statt "ota_0": ohne otadata-Partition bootet der Standard-
+# ESP32-Bootloader automatisch die "factory"-Partition - kein spezieller
+# Bootloader-Build noetig, das uebliche ESP-IDF-Muster fuer Projekte
+# ohne OTA. "coredump" (64 KB) bewusst behalten, obwohl nicht aktiv
+# genutzt - ohne diese Partition meldet das Arduino-ESP32-Framework bei
+# JEDEM Boot einen Fehler ins Log ("No core dump partition found!",
+# live beobachtet) - gegenueber den gewonnenen ~2,75 MB vernachlaessigbar.
+#
+# Name,     Type, SubType,  Offset,    Size,      Flags
+nvs,        data, nvs,      0x9000,    0x5000,
+factory,    app,  factory,  0x10000,   0x3E0000,
+coredump,   data, coredump, 0x3F0000,  0x10000,

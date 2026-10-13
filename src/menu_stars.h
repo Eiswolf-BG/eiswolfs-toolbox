@@ -1,0 +1,22 @@
+#pragma once
+#include <TFT_eSPI.h>
+
+// Gemeinsames Sterne-Twinkle-Modul fuer ALLE Menue-/Untermenue-Bildschirme
+// (schwarzer Hintergrund) sowie den Splash-Screen - dieselbe Optik wie im
+// Flugzeug-Detail-Panel des Radars.
+namespace MenuStars {
+    // Verteilt die Sterne neu ueber den ganzen Bildschirm - einmal beim
+    // Betreten eines neuen Screens aufrufen (NICHT bei jedem Redraw
+    // innerhalb desselben Screens, sonst "springt" die Animation staendig).
+    void reset();
+
+    // In der Warte-/Idle-Schleife eines Screens aufrufen (bei jedem
+    // Schleifendurchlauf ist ok - die Funktion drosselt sich intern selbst
+    // auf ca. alle 60ms, um das Display nicht unnoetig oft anzusprechen).
+    //
+    // gray=true faerbt die Sterne grau statt gruen - fuer den GitHub-QR-
+    // Screen (Alex' Wunsch: "die Sterne sind in diesem Screen grau"), der
+    // mit dem Graustufen-Avatarfoto und dem grauen Zurueck-Button bewusst
+    // farblich zurueckhaltender ist als die uebrigen (gruenen) Menues.
+    void update(TFT_eSPI& tft, bool gray = false);
+}
